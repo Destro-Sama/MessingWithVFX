@@ -33,7 +33,7 @@ public class GroundSlashShooter : MonoBehaviour
 
     private void InstantiateProjectile()
     {
-        var ProjectileObj = Instantiate(projectile, firePoint.position, Quaternion.identity);
+        var ProjectileObj = Instantiate(projectile, new Vector3(firePoint.position.x, firePoint.position.y, firePoint.position.z-1 ), Quaternion.identity);
 
         groundSlashScript = ProjectileObj.GetComponent<GroundSlash>();
         RotateToDestination(ProjectileObj, destination, true);
