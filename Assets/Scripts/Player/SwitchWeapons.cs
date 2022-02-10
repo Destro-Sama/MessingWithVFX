@@ -6,7 +6,6 @@ public class SwitchWeapons : MonoBehaviour
 {
     public GroundSlashShooter groundSlashScript;
     public FPSShooter projectileScript;
-    //Fire Tornado
 
     private void Update()
     {
@@ -26,6 +25,12 @@ public class SwitchWeapons : MonoBehaviour
             groundSlashScript.active = false;
             projectileScript.active = true;
             projectileScript.projectile = projectileScript.projectiles[1];
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            groundSlashScript.active = false;
+            projectileScript.active = true;
+            projectileScript.projectile = projectileScript.projectiles[2];
         }
     }
 

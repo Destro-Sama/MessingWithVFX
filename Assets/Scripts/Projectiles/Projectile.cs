@@ -8,6 +8,10 @@ public class Projectile : MonoBehaviour
     private bool collided;
     public GameObject impactVFX;
     public float destroyTime = 2f;
+    public float ImpactTime = 2f;
+    public bool groundImpact;
+
+    public LayerMask ground;
 
     private void Start()
     {
@@ -22,13 +26,32 @@ public class Projectile : MonoBehaviour
 
             if (impactVFX != null)
             {
+                Quaternion rot;
                 ContactPoint contact = collision.contacts[0];
-                Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
                 Vector3 pos = contact.point;
+                GameObject hitVFX;
+                if (!groundImpact)
+                {
+                    rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
+                    hitVFX = Instantiate(impactVFX, pos, rot) as GameObject;
+                }
+                else
+                {
+                    RaycastHit hit;
+                    Vector3 distance = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+                    if (Physics.Raycast(distance, transform.TransformDirection(-Vector3.up), out hit, 4f, ground))
+                    {
+                        pos = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+                    }
+                    else
+                    {
+                        pos = new Vector3(transform.position.x, 0, transform.position.z);
+                    }
+                    rot = Quaternion.FromToRotation(Vector3.up, Vector3.up);
+                    hitVFX = Instantiate(impactVFX, pos, rot) as GameObject;
+                }
 
-                var hitVFX = Instantiate(impactVFX, pos, rot) as GameObject;
-
-                Destroy(hitVFX, 2f);
+                Destroy(hitVFX, ImpactTime);
             }
 
             if (detector != null)
